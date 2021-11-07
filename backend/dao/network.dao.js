@@ -1,4 +1,4 @@
-const Network = require('../models/Network');
+const db = require('../models/');
 var networkDao = {
     findAll: findAll,
     create: create,
@@ -8,19 +8,19 @@ var networkDao = {
 }
 
 function findAll() {
-    return Network.findAll();
+    return db.network.findAll();
 }
 
 function findById(id) {
-    return Network.findByPk(id);
+    return db.network.findByPk(id);
 }
 
 function deleteById(id) {
-    return Network.destroy({ where: { id: id } });
+    return db.network.destroy({ where: { id: id } });
 }
 
 function create(network) {
-    var newNetwork = new Network(network);
+    var newNetwork = new db.network(network);
     return newNetwork.save();
 }
 
@@ -29,6 +29,6 @@ function updateNetwork(network, id) {
         name: network.name,
         description: network.description,
     };
-    return Network.update(updateNetwork, { where: { id: id } });
+    return db.network.update(updateNetwork, { where: { id: id } });
 }
 module.exports = networkDao;
