@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import { createNetwork } from "../slices/networks";
 
 class AddNetwork extends Component {
@@ -69,6 +70,12 @@ class AddNetwork extends Component {
             <button className="btn btn-success" onClick={this.newNetwork}>
               Add
             </button>
+            <Link
+                to={"/networks"}
+                className="m-3 btn btn-sm btn-primary"
+              >
+                Back
+              </Link>
           </div>
         ) : (
           <div>
@@ -101,6 +108,12 @@ class AddNetwork extends Component {
             <button onClick={this.saveNetwork} className="btn btn-success">
               Submit
             </button>
+            <Link
+                to={"/networks"}
+                className="m-3 btn btn-sm btn-primary"
+              >
+                Back
+              </Link>
           </div>
         )}
       </div>

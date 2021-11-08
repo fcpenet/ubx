@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { updateNetwork, deleteNetwork } from "../slices/networks";
 import NetworkDataService from "../services/network.service";
+import { Link } from "react-router-dom";
 
 class Network extends Component {
   constructor(props) {
@@ -119,16 +120,16 @@ class Network extends Component {
               </div>
             </form>
 
-            <button
-              className="badge badge-danger mr-2"
-              onClick={this.removeNetwork}
-            >
-              Delete
-            </button>
+            <Link
+                to={"/networks"}
+                className="m-3 btn btn-sm btn-primary"
+              >
+                Back
+              </Link>
 
             <button
               type="submit"
-              className="badge badge-success"
+              className="m-3 btn btn-sm btn-success"
               onClick={this.updateContent}
             >
               Update

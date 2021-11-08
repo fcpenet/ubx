@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import {
   retrieveNetworks,
   findNetworksByTitle,
-  deleteAllNetworks,
+  deleteNetwork,
 } from "../slices/networks";
 import { Link } from "react-router-dom";
 
@@ -14,7 +14,7 @@ class NetworksList extends Component {
     this.refreshData = this.refreshData.bind(this);
     this.setActiveNetwork = this.setActiveNetwork.bind(this);
     this.findByTitle = this.findByTitle.bind(this);
-    this.removeAllNetworks = this.removeAllNetworks.bind(this);
+    this.removeNetwork = this.removeNetwork.bind(this);
 
     this.state = {
       currentNetwork: null,
@@ -49,9 +49,10 @@ class NetworksList extends Component {
     });
   }
 
-  removeAllNetworks() {
+  removeNetwork(network) {
+    console.log(network)
     this.props
-      .deleteAllNetworks()
+      .deleteNetwork(network)
       .then((response) => {
         console.log(response);
         this.refreshData();
@@ -70,7 +71,7 @@ class NetworksList extends Component {
   render() {
     const { searchTitle, currentNetwork, currentIndex } = this.state;
     const { networks } = this.props;
-
+    console.log(currentNetwork);
     return (
       <div className="list row">
         <div className="col-md-8">
@@ -78,7 +79,7 @@ class NetworksList extends Component {
             <input
               type="text"
               className="form-control"
-              placeholder="Search by title"
+              placeholder="Search by name"
               value={searchTitle}
               onChange={this.onChangeSearchTitle}
             />
@@ -94,8 +95,21 @@ class NetworksList extends Component {
           </div>
         </div>
         <div className="col-md-6">
-          <h4>Crypto Networks</h4>
+          <div class="row">
+            <div className="col-sm-6">
+              <h4>Crypto Networks</h4>
+            </div>
+            <div className="col-sm-1">
+              <Link
+                to={"/networks/add"}
+                className="m-3 btn btn-sm btn-primary"
+              >
+                Add Network
+              </Link>
+            </div>
+          </div>
 
+          {networks.length === 0 ? <div>Nothing to show...</div> : null}
           <ul className="list-group">
             {networks &&
               networks.map((network, index) => (
@@ -112,40 +126,34 @@ class NetworksList extends Component {
               ))}
           </ul>
 
-          <div class="row">        
-            <div className="col-sm-5">
-              <button
-                className="m-3 btn btn-sm btn-danger"
-                onClick={this.removeAllNetworks}
-              >
-                Remove All
-              </button>
-            </div>
-            
-            <div className="col-sm-5">
-              <button type="button" className="m-3 btn btn-sm btn-primary">      
-                <Link to={"/networks/add"} className="nav-link">
-                  Add
-                </Link>
-            </button>
-            </div>
-            </div>
+
         </div>
         <div className="col-md-6">
           {currentNetwork ? (
             <div>
-              <h4>Network</h4>
-              <div>
-                <label>
-                  <strong>Name:</strong>
-                </label>{" "}
-                {currentNetwork.name}
-              </div>
-              <div>
-                <label>
-                  <strong>Description:</strong>
-                </label>{" "}
-                {currentNetwork.description}
+
+              <div class="column">
+                <div><h4>{currentNetwork.name}</h4></div>
+                <div><h6>{currentNetwork.description}</h6></div>
+
+                <div class="row">
+                  <div className="col-sm-2">
+                    <Link
+                      to={"/networks/" + currentNetwork.id}
+                      className="badge badge-warning"
+                    >
+                      Edit
+                    </Link>
+                  </div>
+                  <div className="col-sm-2">
+                    <button
+                      className="badge badge-danger"
+                      onClick={() => this.removeNetwork(currentNetwork)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           ) : (
@@ -169,5 +177,5 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
   retrieveNetworks,
   findNetworksByTitle,
-  deleteAllNetworks,
+  deleteNetwork,
 })(NetworksList);

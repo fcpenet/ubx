@@ -18,6 +18,8 @@ class NetworkDataService {
   }
 
   delete(id) {
+    console.log("lala")
+    console.log(id)
     return http.delete(`/networks/${id}`);
   }
 
