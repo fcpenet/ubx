@@ -4,8 +4,14 @@ import {
   retrieveNetworks,
   findNetworksByTitle,
   deleteNetwork,
-} from "../slices/networks";
+} from "../../slices/networks";
+
+import {
+  retrieveCoins,
+  deleteCoin,
+} from "../../slices/coins";
 import { Link } from "react-router-dom";
+import { CoinsList } from "../coin/coin-list.component";
 
 class NetworksList extends Component {
   constructor(props) {
@@ -50,9 +56,20 @@ class NetworksList extends Component {
   }
 
   removeNetwork(network) {
-    console.log(network)
     this.props
       .deleteNetwork(network)
+      .then((response) => {
+        console.log(response);
+        this.refreshData();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
+  removeCoin(coin) {
+    this.props
+      .deleteCoin(coin)
       .then((response) => {
         console.log(response);
         this.refreshData();
@@ -74,26 +91,6 @@ class NetworksList extends Component {
     console.log(currentNetwork);
     return (
       <div className="list row">
-        <div className="col-md-8">
-          <div className="input-group mb-3">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search by name"
-              value={searchTitle}
-              onChange={this.onChangeSearchTitle}
-            />
-            <div className="input-group-append">
-              <button
-                className="btn btn-outline-secondary"
-                type="button"
-                onClick={this.findByTitle}
-              >
-                Search
-              </button>
-            </div>
-          </div>
-        </div>
         <div className="col-md-6">
           <div class="row">
             <div className="col-sm-6">
@@ -133,8 +130,8 @@ class NetworksList extends Component {
             <div>
 
               <div class="column">
-                <div><h4>{currentNetwork.name}</h4></div>
-                <div><h6>{currentNetwork.description}</h6></div>
+                <div class="row"><h4>{currentNetwork.name}</h4></div>
+                <div class="row"><h6>{currentNetwork.description}</h6></div>
 
                 <div class="row">
                   <div className="col-sm-2">
@@ -153,6 +150,54 @@ class NetworksList extends Component {
                       Delete
                     </button>
                   </div>
+                </div>
+                <div class="row"><p /></div>
+                <div class="row"><h5>Coins</h5></div>
+                <div class="row">
+                  {currentNetwork.coins.length === 0 ? <div>Nothing to show...</div> : null}
+                  <ul class="list-group list-group-flush">
+                    {currentNetwork.coins &&
+                      currentNetwork.coins.map((coin, index) => (
+                        <li
+                          className="list-group-item"
+                          key={index}
+                        >
+                          <div class="row">
+                            <div className="col-sm-5">
+                              {coin.name}
+                            </div>
+                            <div className="col-sm-1">
+                              <Link
+                                to={"/networks/" + currentNetwork.id +"/coins/" + coin.id}
+                                className="badge badge-warning"
+                              >
+                                Edit
+                              </Link>
+                            </div>
+                            <div className="col-sm-1">
+                              <button
+                                className="badge badge-danger"
+                                onClick={() => this.removeCoin(coin)}
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </div>
+
+                        </li>
+                      ))}
+                  </ul>
+                </div>
+                <div class="row">
+                  <div className="col-sm-5">
+                    <Link
+                      to={"/networks/" + currentNetwork.id +"/coins/add"}
+                      className="m-3 btn btn-sm btn-primary"
+                    >
+                      Add Coin
+                    </Link>
+                  </div>
+
                 </div>
               </div>
             </div>
@@ -178,4 +223,5 @@ export default connect(mapStateToProps, {
   retrieveNetworks,
   findNetworksByTitle,
   deleteNetwork,
+  deleteCoin
 })(NetworksList);

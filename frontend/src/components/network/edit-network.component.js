@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { updateNetwork, deleteNetwork } from "../slices/networks";
-import NetworkDataService from "../services/network.service";
+import { updateNetwork, deleteNetwork } from "../../slices/networks";
+import NetworkDataService from "../../services/network.service";
 import { Link } from "react-router-dom";
 
 class Network extends Component {
@@ -48,6 +48,7 @@ class Network extends Component {
         ...prevState.currentNetwork,
         description: description,
       },
+
     }));
   }
 
@@ -70,7 +71,7 @@ class Network extends Component {
       .unwrap()
       .then((reponse) => {
         console.log(reponse);
-        
+
         this.setState({ message: "The network was updated successfully!" });
       })
       .catch((e) => {
@@ -121,11 +122,11 @@ class Network extends Component {
             </form>
 
             <Link
-                to={"/networks"}
-                className="m-3 btn btn-sm btn-primary"
-              >
-                Back
-              </Link>
+              to={"/networks"}
+              className="m-3 btn btn-sm btn-primary"
+            >
+              Back
+            </Link>
 
             <button
               type="submit"
@@ -134,12 +135,11 @@ class Network extends Component {
             >
               Update
             </button>
-            <p>{this.state.message}</p>
           </div>
         ) : (
           <div>
             <br />
-            <p>Please click on a Network...</p>
+            <p>Invalid id</p>
           </div>
         )}
       </div>

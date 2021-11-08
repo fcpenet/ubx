@@ -1,21 +1,21 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { createNetwork } from "../slices/networks";
+import { createCoin } from "../../slices/coins";
 
-class AddNetwork extends Component {
+class AddCoin extends Component {
   constructor(props) {
     super(props);
     this.onChangeTitle = this.onChangeTitle.bind(this);
     this.onChangeDescription = this.onChangeDescription.bind(this);
-    this.saveNetwork = this.saveNetwork.bind(this);
-    this.newNetwork = this.newNetwork.bind(this);
+    this.saveCoin = this.saveCoin.bind(this);
+    this.newCoin = this.newCoin.bind(this);
 
     this.state = {
       id: null,
       name: "",
       description: "",
-      published: false,
+      networkId: this.props.match.params.networkId,
       submitted: false,
     };
   }
@@ -32,15 +32,16 @@ class AddNetwork extends Component {
     });
   }
 
-  saveNetwork() {
-    const { name, description } = this.state;
+  saveCoin() {
+    const { name, description, networkId } = this.state;
     this.props
-      .createNetwork({ name, description })
+      .createCoin({ name, description, networkId })
       .unwrap()
       .then((data) => {
         this.setState({
           id: data.id,
           name: data.name,
+          networkId: data.networkId,
           description: data.description,
           submitted: true,
         });
@@ -51,7 +52,7 @@ class AddNetwork extends Component {
       });
   }
 
-  newNetwork() {
+  newCoin() {
     this.setState({
       id: null,
       name: "",
@@ -67,7 +68,7 @@ class AddNetwork extends Component {
         {this.state.submitted ? (
           <div>
             <h4>You submitted successfully!</h4>
-            <button className="btn btn-success" onClick={this.newNetwork}>
+            <button className="btn btn-success" onClick={this.newCoin}>
               Add
             </button>
             <Link
@@ -105,7 +106,7 @@ class AddNetwork extends Component {
               />
             </div>
 
-            <button onClick={this.saveNetwork} className="btn btn-success">
+            <button onClick={this.saveCoin} className="btn btn-success">
               Submit
             </button>
             <Link
@@ -121,4 +122,4 @@ class AddNetwork extends Component {
   }
 }
 
-export default connect(null, { createNetwork })(AddNetwork);
+export default connect(null, { createCoin })(AddCoin);

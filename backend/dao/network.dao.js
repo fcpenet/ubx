@@ -8,11 +8,11 @@ var networkDao = {
 }
 
 function findAll() {
-    return db.network.findAll();
+    return db.network.findAll({include: ["coins"]});
 }
 
 function findById(id) {
-    return db.network.findByPk(id);
+    return db.network.findByPk(id, {include: ["coins"] });
 }
 
 function deleteById(id) {
